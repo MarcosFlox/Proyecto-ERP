@@ -274,8 +274,53 @@ Object.defineProperty(Category.prototype, "description", { enumerable: true });
     c1 = new Cap(1, "Cap1", "ta flama", 10, 4, "", "Boina", "Negro", "NIKE");
     console.log(c1.toString());
 
-    class Subclase3 extends Product {
+    class Ring extends Product {
+        //Atributos privados
+        #size;
+        #material;
+        constructor(serial, name, description, price, taxPercentage = Product.IVA, images, size = "unknown", material = "unknown") {
+            //La función se invoca con el operador new
+            if (!new.target) throw new InvalidAccessConstructorException();
+            //Llamada al superconstructor.
+            abstractCreateLock = false; //Desactivamos el cerrojo.
+            super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
+
+            //Validación de argumentos
+            if (!size) throw new EmptyValueException("size");
+            if (!material) throw new EmptyValueException("material");
+
+            //Atributos privados
+            this.#size = size;
+            this.#material = material;
+        }
+
+        //Propiedades de acceso a los atributos privados
+        get size() {
+            return this.#size;
+        }
+        set size(value) {
+            if (!value) throw new EmptyValueException("size");
+            this.#size = value;
+        }
+
+        get material() {
+            return this.#material;
+        }
+        set material(value) {
+            if (!value) throw new EmptyValueException("material");
+            this.#material = value;
+        }
+
+        //Métodos públicos
+        toString() {
+            return " Ring Info: Name: " + this.name + ", Size: " + this.size + ", Material: " + this.material + ", Price: " + this.price + "€";
+        }
     }
+    Object.defineProperty(Ring.prototype, "size", { enumerable: true });
+    Object.defineProperty(Ring.prototype, "material", { enumerable: true });
+    
+    r1 = new Ring(1, "Ring1", "ta flama", 10, 4, "", "Normal", "Oro");
+    console.log(r1.toString());
 })(); //Invocamos la función global.
 
 //Coords
