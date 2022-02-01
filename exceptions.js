@@ -104,3 +104,11 @@ class StoreNotExistException extends StoreHouseException {
 		this.store = store;
 	}
 }
+
+class StoreExistException extends StoreHouseException {
+	constructor (store, fileName, lineNumber){
+		super("Error: The store exists in the storehouse yet. " + store.cif, fileName, lineNumber);
+		this.name = "StoreStoreHouseException";
+		this.store = store;
+	}
+}
