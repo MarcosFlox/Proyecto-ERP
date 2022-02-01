@@ -587,12 +587,12 @@ let StoreHouse = (function () { //La función anónima devuelve un método getIn
 				return this.#stores.findIndex(x => x.cif === store.cif);
 			}
 
-			addProductInShop(product, store, quantity = 1) {
+			addProductInShop(product, store, quantity) {
 				if ((!(product instanceof Product))) {
 					throw new ProductStoreHouseException();
 				}
 				if ((!(store instanceof Store))) {
-					throw new ProductStoreHouseException();
+					throw new StoreStoreHouseException();
 				}
 
 				let prodPosition = this.getProductPosition(product);
@@ -600,9 +600,11 @@ let StoreHouse = (function () { //La función anónima devuelve un método getIn
 				let productsInStore = [];
 				productsInStore = this.#stores[storePosition].products;
 				if (storePosition === -1) {	//si no existe la tienda sacamos un error
-					throw ("La store no existe");
+					throw new StoreNotExistException(store);
 				} else {
-					if (prodPosition === -1) {	//si no existe, añadimos el nuevo producto al array productos
+					if (prodPosition === -1) {
+						throw new ProductNotExistException(product);
+					} else {
 						this.#products.push(product);
 						for (let i = 0; i < quantity; i++) {
 							productsInStore.push(product);
@@ -611,6 +613,86 @@ let StoreHouse = (function () { //La función anónima devuelve un método getIn
 					}
 				}
 				return this.#stores[storePosition].products.length;
+			}
+
+			addQuantityProductInShop(product, store, quantity = 1) {	//por defecto 1 de cantidad en stock
+				if ((!(product instanceof Product))) {
+					throw new ProductStoreHouseException();
+				}
+				if ((!(store instanceof Store))) {
+					throw new StoreStoreHouseException();
+				}
+
+				let prodPosition = this.getProductPosition(product);
+				let storePosition = this.getStorePosition(store);
+				let productsInStore = [];
+				productsInStore = this.#stores[storePosition].products;
+				if (storePosition === -1) {	//si no existe la tienda sacamos un error
+					throw new StoreNotExistException(store);
+				} else {
+					if (prodPosition === -1) {
+						throw new ProductNotExistException(product);
+					} else {
+						this.#products.push(product);
+						for (let i = 0; i < quantity; i++) {
+							productsInStore.push(product);
+						}
+						this.#stores.push({ store: store, products: productsInStore });
+					}
+				}
+				return this.#stores[storePosition].products.length;
+			}
+
+			addStore(store) {
+				if ((!(store instanceof Store))) {
+					throw new StoreStoreHouseException();
+				}
+				let storePosition = this.getStorePosition(store);	//posicion de la tienda en el array global stores
+				if (storePosition === -1) {	//si no existe la tienda 
+					this.#stores.push({ store: store, products: [] }) //la añadimos
+				} else {
+					throw new StoreExistException(store);
+				}
+				return this.#stores.length;
+			}
+
+			removeStore(store) {
+				if ((!(store instanceof Store))) {
+					throw new ProductStoreHouseException();
+				}
+				let storePosition = this.getStorePosition(store);	//posicion de la tienda en el array global stores
+				if (storePosition !== -1) {	//si existe la tienda 
+					this.#stores.splice(storePosition, 1) //la borramos
+				} else {
+					throw new StoreNotExistException(store);	//si no existe excepcion
+				}
+				return this.#stores.length;
+			}
+
+			//Devuelve un iterator de los productos de una tienda
+			getProductsInStore(products) {
+				let nextIndex = 0;
+				return {
+					*[Symbol.iterator]() {
+						for (let product of products) {
+							yield product;
+						}
+					}
+				}
+			}
+
+			getStoreProducts(store, category) {
+				if ((!(store instanceof Store))) {
+					throw new StoreStoreHouseException();
+				}
+				if ((!(category instanceof Store))) {
+					throw new CategoryStoreHouseException();
+				}
+				let storePosition = this.getStorePosition(store);	//posicion de la tienda en el array global stores
+				if (storePosition === -1) {	//si existe la tienda 
+					throw new StoreNotExistException(store);	//si no existe excepcion
+				}
+				return this.getProductsInStore(this.#stores[storePosition].products);
 			}
 
 		}
