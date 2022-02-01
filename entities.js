@@ -1,440 +1,635 @@
-
-
-
 //Category
 class Category {
-    #title;
-    #description;
-    constructor(title, description) {
-        //La función se invoca con el operador new
-        if (!new.target) throw new InvalidAccessConstructorException();
+	#title;
+	#description;
+	constructor(title, description) {
+		//La función se invoca con el operador new
+		if (!new.target) throw new InvalidAccessConstructorException();
 
-        //Validación de parámetros obligatorios
-        if (!title) throw new EmptyValueException("title");
+		//Validación de parámetros obligatorios
+		if (!title) throw new EmptyValueException("title");
 
-        //Definición de atributos privados del objeto
-        this.#title = title;
-        this.#description = description;
-    }
+		//Definición de atributos privados del objeto
+		this.#title = title;
+		this.#description = description;
+	}
 
-    //Propiedades de acceso a los atributos privados
-    get title() {
-        return this.#title;
-    }
-    set title(value) {
-        if (!value) throw new EmptyValueException("title");
-        this.#title = value;
-    }
+	//Propiedades de acceso a los atributos privados
+	get title() {
+		return this.#title;
+	}
+	set title(value) {
+		if (!value) throw new EmptyValueException("title");
+		this.#title = value;
+	}
 
-    get description() {
-        return this.#description;
-    }
-    set description(value) {
-        if (!value) throw new EmptyValueException("description");
-        this.#description = value;
-    }
+	get description() {
+		return this.#description;
+	}
+	set description(value) {
+		if (!value) throw new EmptyValueException("description");
+		this.#description = value;
+	}
 
-    toString() {
-        return "Title: " + this.title + " Description: " + this.description;
-    }
+	toString() {
+		return "Title: " + this.title + " Description: " + this.description;
+	}
 }
 Object.defineProperty(Category.prototype, "title", { enumerable: true });
 Object.defineProperty(Category.prototype, "description", { enumerable: true });
 
 //Product
 (function () {
-    let abstractCreateLock = true; //Definición del cerrojo.
-    //Constructor de Product. Permite definir propiedades comunes para todos los productos de la tienda.
-    class Product {
-        //Campos privados
-        #serial;
-        #name;
-        #description;
-        #price;
-        #taxPercentage;
-        #images;
-        constructor(serial, name, description, price, taxPercentage = Product.IVA, images) {
-            //La función se invoca con el operador new
-            if (!new.target) throw new InvalidAccessConstructorException();
-            if (abstractCreateLock)
-                throw new AbstractClassException("Product");
-            abstractCreateLock = true; //Reactivamos el cerrojo.
+	let abstractCreateLock = true; //Definición del cerrojo.
+	//Constructor de Product. Permite definir propiedades comunes para todos los productos de la tienda.
+	class Product {
+		//Campos privados
+		#serial;
+		#name;
+		#description;
+		#price;
+		#taxPercentage;
+		#images;
+		constructor(serial, name, description, price, taxPercentage = Product.IVA, images) {
+			//La función se invoca con el operador new
+			if (!new.target) throw new InvalidAccessConstructorException();
+			if (abstractCreateLock)
+				throw new AbstractClassException("Product");
+			abstractCreateLock = true; //Reactivamos el cerrojo.
 
-            //Validación de parámetros obligatorios
-            if (!serial) throw new EmptyValueException("serial");
-            if (!name) throw new EmptyValueException("name");
-            if (!description) throw new EmptyValueException("description");
-            price = Number.parseFloat(price);
-            if (!price || price <= 0) throw new InvalidValueException("price", price);
-            if (!taxPercentage || taxPercentage < 0) throw new InvalidValueException("taxPercentage", taxPercentage);
-            // if (!images) throw new EmptyValueException("images");
+			//Validación de parámetros obligatorios
+			if (!serial) throw new EmptyValueException("serial");
+			if (!name) throw new EmptyValueException("name");
+			if (!description) throw new EmptyValueException("description");
+			price = Number.parseFloat(price);
+			if (!price || price <= 0) throw new InvalidValueException("price", price);
+			if (!taxPercentage || taxPercentage < 0) throw new InvalidValueException("taxPercentage", taxPercentage);
+			// if (!images) throw new EmptyValueException("images");
 
-            //Definición de atributos privados del objeto
-            this.#serial = serial;
-            this.#name = name;
-            this.#description = description;
-            this.#price = price;
-            this.#taxPercentage = taxPercentage;
-            this.#images = images;
-        }
+			//Definición de atributos privados del objeto
+			this.#serial = serial;
+			this.#name = name;
+			this.#description = description;
+			this.#price = price;
+			this.#taxPercentage = taxPercentage;
+			this.#images = images;
+		}
 
-        //Propiedades de acceso a los atributos privados
-        get serial() {
-            return this.#serial;
-        }
-        set serial(value) {
-            if (!value) throw new EmptyValueException("serial");
-            this.#serial = value;
-        }
+		//Propiedades de acceso a los atributos privados
+		get serial() {
+			return this.#serial;
+		}
+		set serial(value) {
+			if (!value) throw new EmptyValueException("serial");
+			this.#serial = value;
+		}
 
-        get name() {
-            return this.#name;
-        }
-        set name(value) {
-            if (!value) throw new EmptyValueException("name");
-            this.#name = value;
-        }
+		get name() {
+			return this.#name;
+		}
+		set name(value) {
+			if (!value) throw new EmptyValueException("name");
+			this.#name = value;
+		}
 
-        get description() {
-            return this.#description;
-        }
-        set description(value) {
-            if (!value) throw new EmptyValueException("description");
-            this.#description = value;
-        }
+		get description() {
+			return this.#description;
+		}
+		set description(value) {
+			if (!value) throw new EmptyValueException("description");
+			this.#description = value;
+		}
 
-        get price() {
-            return this.#price;
-        }
-        set price(value) {
-            value = Number.parseFloat(value);
-            if (Number.isNaN(value) && value > 0) throw new InvalidValueException("price", value);
-            this.#price = value;
-        }
+		get price() {
+			return this.#price;
+		}
+		set price(value) {
+			value = Number.parseFloat(value);
+			if (Number.isNaN(value) && value > 0) throw new InvalidValueException("price", value);
+			this.#price = value;
+		}
 
-        get taxPercentage() {
-            return this.#taxPercentage;
-        }
-        set taxPercentage(value = Product.IVA) {
-            if (!value || value < 0) throw new InvalidValueException("taxPercentage", value);
-            this.#taxPercentage = value;
-        }
+		get taxPercentage() {
+			return this.#taxPercentage;
+		}
+		set taxPercentage(value = Product.IVA) {
+			if (!value || value < 0) throw new InvalidValueException("taxPercentage", value);
+			this.#taxPercentage = value;
+		}
 
-        //Propiedades estáticas.
-        static get IVA() {
-            return 21;
-        }
+		//Propiedades estáticas.
+		static get IVA() {
+			return 21;
+		}
 
-        get images() {
-            return this.#images;
-        }
-        set images(value) {
-            if (!value) throw new EmptyValueException("images");
-            this.#images = value;
-        }
-    }
-    Object.defineProperty(Product.prototype, "serial", { enumerable: true });
-    Object.defineProperty(Product.prototype, "name", { enumerable: true });
-    Object.defineProperty(Product.prototype, "description", { enumerable: true, writable: true });
-    Object.defineProperty(Product.prototype, "price", { enumerable: true });
-    Object.defineProperty(Product.prototype, "taxPercentage", { enumerable: true });
-    Object.defineProperty(Product.prototype, "images", { enumerable: true });
+		get images() {
+			return this.#images;
+		}
+		set images(value) {
+			if (!value) throw new EmptyValueException("images");
+			this.#images = value;
+		}
+	}
+	Object.defineProperty(Product.prototype, "serial", { enumerable: true });
+	Object.defineProperty(Product.prototype, "name", { enumerable: true });
+	Object.defineProperty(Product.prototype, "description", { enumerable: true, writable: true });
+	Object.defineProperty(Product.prototype, "price", { enumerable: true });
+	Object.defineProperty(Product.prototype, "taxPercentage", { enumerable: true });
+	Object.defineProperty(Product.prototype, "images", { enumerable: true });
 
-    //Definimos la subclases 
-    class Hoodie extends Product {
-        //Atributos privados
-        #color;
-        #brand;
-        #size;
-        #material;
-        constructor(serial, name, description, price, taxPercentage = Product.IVA, images, color = "unknown", brand = "unknown", size = "-", material = "unknown") {
-            //La función se invoca con el operador new
-            if (!new.target) throw new InvalidAccessConstructorException();
-            //Llamada al superconstructor.
-            abstractCreateLock = false; //Desactivamos el cerrojo.
-            super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
+	//Definimos la subclases 
+	class Hoodie extends Product {
+		//Atributos privados
+		#color;
+		#brand;
+		#size;
+		#material;
+		constructor(serial, name, description, price, taxPercentage = Product.IVA, images, color = "unknown", brand = "unknown", size = "-", material = "unknown") {
+			//La función se invoca con el operador new
+			if (!new.target) throw new InvalidAccessConstructorException();
+			//Llamada al superconstructor.
+			abstractCreateLock = false; //Desactivamos el cerrojo.
+			super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
 
-            //Validación de argumentos
-            if (!color) throw new EmptyValueException("color");
-            if (!brand) throw new EmptyValueException("brand");
-            if (!size) throw new EmptyValueException("size");
-            //material no lo considero obligatorio
+			//Validación de argumentos
+			if (!color) throw new EmptyValueException("color");
+			if (!brand) throw new EmptyValueException("brand");
+			if (!size) throw new EmptyValueException("size");
+			//material no lo considero obligatorio
 
-            //Atributos privados
-            this.#color = color;
-            this.#brand = brand;
-            this.#size = size;
-            this.#material = material;
-        }
+			//Atributos privados
+			this.#color = color;
+			this.#brand = brand;
+			this.#size = size;
+			this.#material = material;
+		}
 
-        //Propiedades de acceso a los atributos privados
-        get color() {
-            return this.#color;
-        }
-        set color(value) {
-            if (!value) throw new EmptyValueException("color");
-            this.#color = value;
-        }
+		//Propiedades de acceso a los atributos privados
+		get color() {
+			return this.#color;
+		}
+		set color(value) {
+			if (!value) throw new EmptyValueException("color");
+			this.#color = value;
+		}
 
-        get brand() {
-            return this.#brand;
-        }
-        set brand(value) {
-            if (!brand) throw new EmptyValueException("brand");
-            this.#brand = value;
-        }
+		get brand() {
+			return this.#brand;
+		}
+		set brand(value) {
+			if (!brand) throw new EmptyValueException("brand");
+			this.#brand = value;
+		}
 
-        get size() {
-            return this.#size;
-        }
-        set size(value) {
-            if (!size) throw new EmptyValueException("size");
-            this.#size = value;
-        }
+		get size() {
+			return this.#size;
+		}
+		set size(value) {
+			if (!size) throw new EmptyValueException("size");
+			this.#size = value;
+		}
 
-        get material() {
-            return this.#material;
-        }
-        set material(value) {
-            if (!material) throw new EmptyValueException("brand");
-            this.#material = value;
-        }
+		get material() {
+			return this.#material;
+		}
+		set material(value) {
+			if (!material) throw new EmptyValueException("brand");
+			this.#material = value;
+		}
 
-        //Métodos públicos
-        toString() {
-            return " Hoodie Info: Name: " + this.name + ", Brand: " + this.brand + ", Size: " + this.size + ", Color: " + this.color + ", Material: " + this.material + ", Price: " + this.price + "€";
-        }
-    }
-    Object.defineProperty(Hoodie.prototype, "color", { enumerable: true });
-    Object.defineProperty(Hoodie.prototype, "brand", { enumerable: true });
-    Object.defineProperty(Hoodie.prototype, "size", { enumerable: true });
-    Object.defineProperty(Hoodie.prototype, "material", { value: "Unknown", enumerable: true });
+		//Métodos públicos
+		toString() {
+			return " Hoodie Info: Name: " + this.name + ", Brand: " + this.brand + ", Size: " + this.size + ", Color: " + this.color + ", Material: " + this.material + ", Price: " + this.price + "€";
+		}
+	}
+	Object.defineProperty(Hoodie.prototype, "color", { enumerable: true });
+	Object.defineProperty(Hoodie.prototype, "brand", { enumerable: true });
+	Object.defineProperty(Hoodie.prototype, "size", { enumerable: true });
+	Object.defineProperty(Hoodie.prototype, "material", { value: "Unknown", enumerable: true });
 
-    h1 = new Hoodie(1, "DelPSG", "ta flama", 33, 4, "", "Negro", "NIKE", "XL", "Cotton");
-    console.log(h1.toString());
+	h1 = new Hoodie(1, "DelPSG", "ta flama", 33, 4, "", "Negro", "NIKE", "XL", "Cotton");
+	console.log(h1.toString());
 
-    //Cap
-    class Cap extends Product {
-        //Atributos privados
-        #color;
-        #brand;
-        #type;
-        constructor(serial, name, description, price, taxPercentage = Product.IVA, images, type = "unknown", color = "unknown", brand = "unknown") {
-            //La función se invoca con el operador new
-            if (!new.target) throw new InvalidAccessConstructorException();
-            //Llamada al superconstructor.
-            abstractCreateLock = false; //Desactivamos el cerrojo.
-            super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
+	//Cap
+	class Cap extends Product {
+		//Atributos privados
+		#type;
+		#color;
+		#brand;
 
-            //Validación de argumentos
-            if (!type) throw new EmptyValueException("size");
-            if (!color) throw new EmptyValueException("color");
-            if (!brand) throw new EmptyValueException("brand");
+		constructor(serial, name, description, price, taxPercentage = Product.IVA, images, type = "unknown", color = "unknown", brand = "unknown") {
+			//La función se invoca con el operador new
+			if (!new.target) throw new InvalidAccessConstructorException();
+			//Llamada al superconstructor.
+			abstractCreateLock = false; //Desactivamos el cerrojo.
+			super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
 
-            //Atributos privados
-            this.#type = type;
-            this.#color = color;
-            this.#brand = brand;
-        }
+			//Validación de argumentos
+			if (!type) throw new EmptyValueException("size");
+			if (!color) throw new EmptyValueException("color");
+			if (!brand) throw new EmptyValueException("brand");
 
-        //Propiedades de acceso a los atributos privados
-        get type() {
-            return this.#type;
-        }
-        set type(value) {
-            if (!value) throw new EmptyValueException("type");
-            this.#type = value;
-        }
+			//Atributos privados
+			this.#type = type;
+			this.#color = color;
+			this.#brand = brand;
+		}
 
-        get color() {
-            return this.#color;
-        }
-        set color(value) {
-            if (!value) throw new EmptyValueException("color");
-            this.#color = value;
-        }
+		//Propiedades de acceso a los atributos privados
+		get type() {
+			return this.#type;
+		}
+		set type(value) {
+			if (!value) throw new EmptyValueException("type");
+			this.#type = value;
+		}
 
-        get brand() {
-            return this.#brand;
-        }
-        set brand(value) {
-            if (!value) throw new EmptyValueException("brand");
-            this.#brand = value;
-        }
+		get color() {
+			return this.#color;
+		}
+		set color(value) {
+			if (!value) throw new EmptyValueException("color");
+			this.#color = value;
+		}
 
-        //Métodos públicos
-        toString() {
-            return " Cap Info: Name: " + this.name + ", Brand: " + this.brand + ", Type: " + this.type + ", Color: " + this.color + ", Price: " + this.price + "€";
-        }
-    }
-    Object.defineProperty(Cap.prototype, "type", { enumerable: true });
-    Object.defineProperty(Cap.prototype, "color", { enumerable: true });
-    Object.defineProperty(Cap.prototype, "brand", { enumerable: true });
+		get brand() {
+			return this.#brand;
+		}
+		set brand(value) {
+			if (!value) throw new EmptyValueException("brand");
+			this.#brand = value;
+		}
 
-    c1 = new Cap(1, "Cap1", "ta flama", 10, 4, "", "Boina", "Negro", "NIKE");
-    console.log(c1.toString());
+		//Métodos públicos
+		toString() {
+			return " Cap Info: Name: " + this.name + ", Brand: " + this.brand + ", Type: " + this.type + ", Color: " + this.color + ", Price: " + this.price + "€";
+		}
+	}
+	Object.defineProperty(Cap.prototype, "type", { enumerable: true });
+	Object.defineProperty(Cap.prototype, "color", { enumerable: true });
+	Object.defineProperty(Cap.prototype, "brand", { enumerable: true });
 
-    class Ring extends Product {
-        //Atributos privados
-        #size;
-        #material;
-        constructor(serial, name, description, price, taxPercentage = Product.IVA, images, size = "unknown", material = "unknown") {
-            //La función se invoca con el operador new
-            if (!new.target) throw new InvalidAccessConstructorException();
-            //Llamada al superconstructor.
-            abstractCreateLock = false; //Desactivamos el cerrojo.
-            super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
+	c1 = new Cap(1, "Cap1", "ta flama", 10, 4, "", "Boina", "Negro", "NIKE");
+	console.log(c1.toString());
 
-            //Validación de argumentos
-            if (!size) throw new EmptyValueException("size");
-            if (!material) throw new EmptyValueException("material");
+	class Ring extends Product {
+		//Atributos privados
+		#size;
+		#material;
+		constructor(serial, name, description, price, taxPercentage = Product.IVA, images, size = "unknown", material = "unknown") {
+			//La función se invoca con el operador new
+			if (!new.target) throw new InvalidAccessConstructorException();
+			//Llamada al superconstructor.
+			abstractCreateLock = false; //Desactivamos el cerrojo.
+			super(serial, name, description, price, taxPercentage, images);     //Product.name sería el modelo (nombre de la hoodie)
 
-            //Atributos privados
-            this.#size = size;
-            this.#material = material;
-        }
+			//Validación de argumentos
+			if (!size) throw new EmptyValueException("size");
+			if (!material) throw new EmptyValueException("material");
 
-        //Propiedades de acceso a los atributos privados
-        get size() {
-            return this.#size;
-        }
-        set size(value) {
-            if (!value) throw new EmptyValueException("size");
-            this.#size = value;
-        }
+			//Atributos privados
+			this.#size = size;
+			this.#material = material;
+		}
 
-        get material() {
-            return this.#material;
-        }
-        set material(value) {
-            if (!value) throw new EmptyValueException("material");
-            this.#material = value;
-        }
+		//Propiedades de acceso a los atributos privados
+		get size() {
+			return this.#size;
+		}
+		set size(value) {
+			if (!value) throw new EmptyValueException("size");
+			this.#size = value;
+		}
 
-        //Métodos públicos
-        toString() {
-            return " Ring Info: Name: " + this.name + ", Size: " + this.size + ", Material: " + this.material + ", Price: " + this.price + "€";
-        }
-    }
-    Object.defineProperty(Ring.prototype, "size", { enumerable: true });
-    Object.defineProperty(Ring.prototype, "material", { enumerable: true });
-    
-    r1 = new Ring(1, "Ring1", "ta flama", 10, 4, "", "Normal", "Oro");
-    console.log(r1.toString());
+		get material() {
+			return this.#material;
+		}
+		set material(value) {
+			if (!value) throw new EmptyValueException("material");
+			this.#material = value;
+		}
+
+		//Métodos públicos
+		toString() {
+			return " Ring Info: Name: " + this.name + ", Size: " + this.size + ", Material: " + this.material + ", Price: " + this.price + "€";
+		}
+	}
+	Object.defineProperty(Ring.prototype, "size", { enumerable: true });
+	Object.defineProperty(Ring.prototype, "material", { enumerable: true });
+
+	r1 = new Ring(1, "Ring1", "ta flama", 10, 4, "", "Normal", "Oro");
+	console.log(r1.toString());
+
+	window.Product = Product;
+	window.Hoodie = Hoodie;
+	window.Cap = Cap;
+	window.Ring = Ring;
 })(); //Invocamos la función global.
 
 //Coords
 class Coords {
-    #latitude;
-    #longitude;
-    constructor(latitude, longitude) {
-        //La función se invoca con el operador new
-        if (!new.target) throw new InvalidAccessConstructorException();
+	#latitude;
+	#longitude;
+	constructor(latitude, longitude) {
+		//La función se invoca con el operador new
+		if (!new.target) throw new InvalidAccessConstructorException();
 
-        //Validación de parámetros obligatorios
-        if (!latitude) throw new EmptyValueException("latitude");
-        if (!longitude) throw new EmptyValueException("longitude");
+		//Validación de parámetros obligatorios
+		if (!latitude) throw new EmptyValueException("latitude");
+		if (!longitude) throw new EmptyValueException("longitude");
 
-        //Definición de atributos privados del objeto
-        this.#latitude = latitude;
-        this.#longitude = longitude;
-    }
+		//Definición de atributos privados del objeto
+		this.#latitude = latitude;
+		this.#longitude = longitude;
+	}
 
-    //Propiedades de acceso a los atributos privados
-    get latitude() {
-        return this.#latitude;
-    }
-    set latitude(value) {
-        if (!value) throw new EmptyValueException("latitude");
-        this.#latitude = value;
-    }
+	//Propiedades de acceso a los atributos privados
+	get latitude() {
+		return this.#latitude;
+	}
+	set latitude(value) {
+		if (!value) throw new EmptyValueException("latitude");
+		this.#latitude = value;
+	}
 
-    get longitude() {
-        return this.#longitude;
-    }
-    set longitude(value) {
-        if (!value) throw new EmptyValueException("longitude");
-        this.#longitude = value;
-    }
+	get longitude() {
+		return this.#longitude;
+	}
+	set longitude(value) {
+		if (!value) throw new EmptyValueException("longitude");
+		this.#longitude = value;
+	}
 
-    toString() {
-        return "Longitude: " + this.latitude + " Latitude: " + this.longitude;
-    }
+	toString() {
+		return "Longitude: " + this.latitude + " Latitude: " + this.longitude;
+	}
 }
 // Object.defineProperty(Coords.prototype, "latitude", { enumerable: true });
 // Object.defineProperty(Coords.prototype, "longitude", { enumerable: true });
 
 //Store
 class Store {
-    #cif;
-    #name;
-    #address;
-    #phone;
-    #coords;
-    constructor(cif, name, address, phone, coords) {
-        //La función se invoca con el operador new
-        if (!new.target) throw new InvalidAccessConstructorException();
+	#cif;
+	#name;
+	#address;
+	#phone;
+	#coords;
+	constructor(cif, name, address, phone, coords) {
+		//La función se invoca con el operador new
+		if (!new.target) throw new InvalidAccessConstructorException();
 
-        //Validación de parámetros obligatorios
-        if (!cif) throw new EmptyValueException("cif");
-        if (!name) throw new EmptyValueException("name");
-        if (!address) throw new EmptyValueException("address");
-        if (!phone) throw new EmptyValueException("phone");
-        if (!coords) throw new EmptyValueException("coords");
-        if (!(coords instanceof Coords)) throw new InvalidValueException("coords");
+		//Validación de parámetros obligatorios
+		if (!cif) throw new EmptyValueException("cif");
+		if (!name) throw new EmptyValueException("name");
+		if (!address) throw new EmptyValueException("address");
+		if (!phone) throw new EmptyValueException("phone");
+		if (!coords) throw new EmptyValueException("coords");
+		if (!(coords instanceof Coords)) throw new InvalidValueException("coords");
 
-        //Definición de atributos privados del objeto
-        this.#cif = cif;
-        this.#name = name;
-        this.#address = address;
-        this.#phone = phone;
-        this.#coords = coords;
-    }
+		//Definición de atributos privados del objeto
+		this.#cif = cif;
+		this.#name = name;
+		this.#address = address;
+		this.#phone = phone;
+		this.#coords = coords;
+	}
 
-    //Propiedades de acceso a los atributos privados
-    get cif() {
-        return this.#cif;
-    }
-    set cif(value) {
-        if (!value) throw new EmptyValueException("cif");
-        this.#cif = value;
-    }
+	//Propiedades de acceso a los atributos privados
+	get cif() {
+		return this.#cif;
+	}
+	set cif(value) {
+		if (!value) throw new EmptyValueException("cif");
+		this.#cif = value;
+	}
 
-    get name() {
-        return this.#name;
-    }
-    set name(value) {
-        if (!value) throw new EmptyValueException("name");
-        this.#name = value;
-    }
+	get name() {
+		return this.#name;
+	}
+	set name(value) {
+		if (!value) throw new EmptyValueException("name");
+		this.#name = value;
+	}
 
-    get address() {
-        return this.#address;
-    }
-    set address(value) {
-        if (!value) throw new EmptyValueException("address");
-        this.#address = value;
-    }
+	get address() {
+		return this.#address;
+	}
+	set address(value) {
+		if (!value) throw new EmptyValueException("address");
+		this.#address = value;
+	}
 
-    get phone() {
-        return this.#phone;
-    }
-    set phone(value) {
-        if (!value) throw new EmptyValueException("phone");
-        this.#phone = value;
-    }
+	get phone() {
+		return this.#phone;
+	}
+	set phone(value) {
+		if (!value) throw new EmptyValueException("phone");
+		this.#phone = value;
+	}
 
-    get coords() {
-        return this.#coords;
-    }
-    set coords(value) {
-        if (!value) throw new EmptyValueException("coords");
-        if (!(value instanceof Coords)) throw new InvalidValueException("coords");
-        this.#coords = value;
-    }
+	get coords() {
+		return this.#coords;
+	}
+	set coords(value) {
+		if (!value) throw new EmptyValueException("coords");
+		if (!(value instanceof Coords)) throw new InvalidValueException("coords");
+		this.#coords = value;
+	}
 }
 // Object.defineProperty(Store.prototype, "cif", { enumerable: true });
 // Object.defineProperty(Store.prototype, "name", { enumerable: true });
 // Object.defineProperty(Store.prototype, "address", { enumerable: true });
 // Object.defineProperty(Store.prototype, "phone", { enumerable: true });
 // Object.defineProperty(Store.prototype, "coords", { enumerable: true });
+
+//Declaración objeto StoreHouse mediante patrón Singleton
+let StoreHouse = (function () { //La función anónima devuelve un método getInstance que permite obtener el objeto único
+	let instantiated; //Objeto con la instancia única StoreHouse
+
+	function init() { //Inicialización del Singleton
+		class StoreHouse {
+			//Definición de atributos privados del objeto
+			#name; //nombre del StoreHouse
+			#stores = []; //array con las tiendas
+			#categories = []; //array con las categorias
+			#products = [];
+			constructor(name) {
+				//La función se invoca con el operador new
+				if (!new.target) throw new InvalidAccessConstructorException();
+				if (!name) throw new EmptyValueException("name");
+				this.#name = name;
+			}
+			//Getter y setter de name
+			get name() {
+				return this.#name;
+			}
+			set name(value) {
+				if (!value) throw new EmptyValueException("name");
+				this.#name = value;
+			}
+			//Devuelve un iterator de las categorias
+			getCategories() {
+				let nextIndex = 0;
+				let array = this.#categories;
+				return {
+					*[Symbol.iterator]() {
+						for (let category of array) {
+							yield category;
+						}
+					}
+				}
+			}
+			//Devuelve un iterator de las tiendas
+			getStores() {
+				let nextIndex = 0;
+				let array = this.#stores;
+				return {
+					*[Symbol.iterator]() {
+						for (let store of array) {
+							yield store;
+						}
+					}
+				}
+			}
+
+			//Dado un product, devuelve la posición de esa categoria en categories o -1 si no lo encontramos.
+			getCategoryPosition(category) {
+				if (!(category instanceof Category)) {
+					throw new CategoryStoreHouseException();
+				}
+				return this.#categories.findIndex(x => x.title === category.title);
+			}
+
+			getAmountOfCategories() {
+				return this.#categories.length;
+			}
+
+			//Añade una nueva categoria en el almacén.
+			addCategory(category = "") {
+				if (!(category instanceof Category)) {
+					throw new CategoryStoreHouseException();
+				}
+				if (category = "") {
+					throw new EmptyValueException();
+				}
+				let position = this.getCategoryPosition(category);
+				if (position === -1) {
+					this.#categories.push(category);
+				} else {
+					throw new CategoryExistsException();
+				}
+				return this.#categories.length;
+			}
+
+			//Elimina un category si existe, sino lanzamos una excepción
+			removeCategory(category = "") {
+				if (!(category instanceof Category)) {
+					throw new CategoryStoreHouseException();
+				}
+				let position = this.getCategoryPosition(category);
+				if (position === -1) {
+					this.#categories.splice(position, 1);
+				} else {
+					throw new CategoryNotExistException(category);
+				}
+				return this.#categories.length;
+			}
+
+			//Dado un product, devuelve la posición de ese product en la tienda o -1 si no lo encontramos.
+			getProductPosition(product) {
+				if ((!(product instanceof Product))) {
+					throw new ProductStoreHouseException();
+				}
+				return this.#products.findIndex(x => x.serial === product.serial);
+			}
+
+			//Añade un nuevo product en el carrito o incrementa su cantidad si ya existe. La cantidad es opcional.
+			addProduct(product, category) {
+				if ((!(product instanceof Product))) {
+					throw new ProductStoreHouseException();
+				}
+				if (!(category instanceof Category)) {
+					throw new CategoryStoreHouseException();
+				}
+
+				let categoryPos;
+				if (this.getCategoryPosition === -1) {
+					this.addCategory(category);
+					categoryPos = this.getCategoryPosition(category);
+				} else {
+					categoryPos = this.getCategoryPosition(category);
+				}
+
+				//Añado el producto al array de productos
+				this.#products.push({ product: product, category: this.#categories[categoryPos].title });
+
+				return this.#products.length;
+			}
+
+			removeProduct(product) {
+				if ((!(product instanceof Product))) {
+					throw new ProductStoreHouseException();
+				}
+				let position = this.getProductPosition(product);
+				if (position !== -1) {	//si existe
+					this.#products.splice(position, 1);	//lo eliminamos
+				} else {
+					throw new ProductNotExistException(product);	//si no existe sacamos una excepcion
+				}
+				return this.#products.length;
+			}
+
+			//Dado un store, devuelve su posición en el almacen o -1 si no lo encontramos.
+			getStorePosition(store) {
+				if ((!(store instanceof Store))) {
+					throw new StoreStoreHouseException();
+				}
+				return this.#stores.findIndex(x => x.cif === store.cif);
+			}
+
+			addProductInShop(product, store, quantity = 1) {
+				if ((!(product instanceof Product))) {
+					throw new ProductStoreHouseException();
+				}
+				if ((!(store instanceof Store))) {
+					throw new ProductStoreHouseException();
+				}
+
+				let prodPosition = this.getProductPosition(product);
+				let storePosition = this.getStorePosition(store);
+				let productsInStore = [];
+				productsInStore = this.#stores[storePosition].products;
+				if (storePosition === -1) {	//si no existe la tienda sacamos un error
+					throw ("La store no existe");
+				} else {
+					if (prodPosition === -1) {	//si no existe, añadimos el nuevo producto al array productos
+						this.#products.push(product);
+						for (let i = 0; i < quantity; i++) {
+							productsInStore.push(product);
+						}
+						this.#stores.push({ store: store, products: productsInStore });
+					}
+				}
+				return this.#stores[storePosition].products.length;
+			}
+
+		}
+		Object.defineProperty(StoreHouse.prototype, "name", { enumerable: true });
+		Object.defineProperty(StoreHouse.prototype, "stores", { enumerable: true });
+		Object.defineProperty(StoreHouse.prototype, "categories", { enumerable: true });
+		Object.defineProperty(StoreHouse.prototype, "products", { enumerable: true });
+
+		let sc = new StoreHouse();//Devolvemos el objeto StoreHouse para que sea una instancia única.
+		Object.freeze(sc);
+		return sc;
+	} //Fin inicialización del Singleton
+	return {
+		// Devuelve un objeto con el método getInstance
+		getInstance: function () {
+			if (!instantiated) { //Si la variable instantiated es undefined, priemera ejecución, ejecuta init.
+				instantiated = init(); //instantiated contiene el objeto único
+			}
+			return instantiated; //Si ya está asignado devuelve la asignación.
+		}
+	};
+})();
